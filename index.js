@@ -7,6 +7,8 @@ import {
   DeviceController,
   BrandController,
   TypeController,
+  ReviewController,
+  BasketController,
 } from './controllers/index.js';
 import { errorHnadller } from './middleware/ErrorHandlingMiddleware.js';
 import path from 'path';
@@ -46,6 +48,9 @@ app.get('/hit', DeviceController.getAllHit);
 app.get('/sale', DeviceController.getAllSale);
 app.get('/device/:id', DeviceController.getOne);
 
+// REVIEWS
+app.post('/review', ReviewController.create);
+
 // BRAND
 app.get('/brand', BrandController.getAll);
 app.post('/brand', chaeckRole('ADMIN'), BrandController.create);
@@ -54,6 +59,11 @@ app.post('/brand', chaeckRole('ADMIN'), BrandController.create);
 app.get('/type', TypeController.getAll);
 app.post('/type', chaeckRole('ADMIN'), TypeController.create);
 
+// BASKET
+app.post('/basket', AuthMiddleware, BasketController.add);
+app.get('/basket/:id', AuthMiddleware, BasketController.getAll);
+app.post('/order', BasketController.confirm);
+app.delete('/basket/:id', AuthMiddleware, BasketController.remove);
 // RATING
 app.get('/rating');
 

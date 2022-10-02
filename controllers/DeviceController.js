@@ -1,8 +1,9 @@
 import { v4 } from 'uuid';
 import path from 'path';
-import { Device, DeviceInfo } from '../models/models.js';
+import { Device, DeviceInfo, Reviews } from '../models/models.js';
 import { AppError } from '../error/AppError.js';
 import commonjsVariables from 'commonjs-variables-for-esmodules';
+import { Op } from 'sequelize';
 
 const { __dirname } = commonjsVariables(import.meta);
 
@@ -58,7 +59,7 @@ export const getAllSale = async (req, res) => {
 };
 
 export const getAll = async (req, res) => {
-  const { brandId, typeId } = req.query,
+  const { brandId, typeId, str } = req.query,
     page = req.query.page || 1,
     limit = req.query.limit || 9;
 
@@ -67,6 +68,19 @@ export const getAll = async (req, res) => {
 
   let offset = page * limit - limit;
   let devices;
+
+  if (str && !brandId && !typeId) {
+    const findDevices = await Device.findAll({
+      where: {
+        name: {
+          [Op.substring]: str,
+        },
+      },
+    });
+
+    return res.json(findDevices);
+  }
+
   if (!brandId && !typeId) {
     devices = await Device.findAndCountAll({ limit, offset });
   }
@@ -105,7 +119,10 @@ export const getOne = async (req, res) => {
   const { id } = req.params;
   const device = await Device.findOne({
     where: { id },
-    include: [{ model: DeviceInfo, as: 'info' }],
+    include: [
+      { model: DeviceInfo, as: 'info' },
+      { model: Reviews, as: 'reviews' },
+    ],
   });
   return res.json(device);
 };

@@ -14,6 +14,13 @@ export const Basket = sequelize.define('basket', {
 
 export const BasketDevice = sequelize.define('basket_device', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  count: { type: DataTypes.INTEGER },
+});
+
+export const Order = sequelize.define('orders', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  deviceId: { type: DataTypes.INTEGER, allowNull: false },
+  email: { type: DataTypes.STRING, allowNull: false },
 });
 
 export const Device = sequelize.define('device', {
@@ -25,6 +32,12 @@ export const Device = sequelize.define('device', {
   sale: { type: DataTypes.BOOLEAN, defaultValue: false },
   discount: { type: DataTypes.INTEGER },
   img: { type: DataTypes.STRING, allowNull: false },
+});
+
+export const Reviews = sequelize.define('reviews', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  text: { type: DataTypes.STRING, allowNull: false },
+  author: { type: DataTypes.STRING },
 });
 
 export const Type = sequelize.define('type', {
@@ -70,11 +83,17 @@ Device.belongsTo(Brand);
 Device.hasMany(Rating);
 Rating.belongsTo(Device);
 
+Device.hasMany(Reviews, { as: 'reviews' });
+Reviews.belongsTo(Device);
+
 Device.hasMany(BasketDevice);
 BasketDevice.belongsTo(Device);
 
 Device.hasMany(DeviceInfo, { as: 'info' });
 DeviceInfo.belongsTo(Device);
+
+Device.hasMany(BasketDevice, { as: 'basketDevice' });
+BasketDevice.belongsTo(Device);
 
 Type.belongsToMany(Brand, { through: TypeBrand });
 Brand.belongsToMany(Type, { through: TypeBrand });
