@@ -47,7 +47,7 @@ app.get('/auth', AuthMiddleware, UserController.chaeckAuth);
 app.get('/product', DeviceController.getAll);
 app.get('/product/:id', DeviceController.getOne);
 app.get('/hit', DeviceController.getAllHit);
-app.get('/product', DeviceController.getAllSale);
+app.get('/sale', DeviceController.getAllSale);
 app.post('/product', chaeckRole('ADMIN'), DeviceController.create);
 app.patch('/product', chaeckRole('ADMIN'), DeviceController.update);
 app.delete('/product/:id', chaeckRole('ADMIN'), DeviceController.deleteOne);
