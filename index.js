@@ -44,13 +44,13 @@ app.post('/login', UserController.login);
 app.get('/auth', AuthMiddleware, UserController.chaeckAuth);
 
 // DEVICE
-app.get('/device', DeviceController.getAll);
-app.get('/device/:id', DeviceController.getOne);
+app.get('/product', DeviceController.getAll);
+app.get('/product/:id', DeviceController.getOne);
 app.get('/hit', DeviceController.getAllHit);
-app.get('/sale', DeviceController.getAllSale);
-app.post('/device', chaeckRole('ADMIN'), DeviceController.create);
-app.patch('/device', chaeckRole('ADMIN'), DeviceController.update);
-app.delete('/device/:id', chaeckRole('ADMIN'), DeviceController.deleteOne);
+app.get('/product', DeviceController.getAllSale);
+app.post('/product', chaeckRole('ADMIN'), DeviceController.create);
+app.patch('/product', chaeckRole('ADMIN'), DeviceController.update);
+app.delete('/product/:id', chaeckRole('ADMIN'), DeviceController.deleteOne);
 app.get('/reviews', DeviceController.getAllReviews);
 
 // REVIEWS
