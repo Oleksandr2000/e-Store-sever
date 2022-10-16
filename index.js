@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import sequelize from './db.js';
@@ -42,11 +44,14 @@ app.post('/login', UserController.login);
 app.get('/auth', AuthMiddleware, UserController.chaeckAuth);
 
 // DEVICE
-app.post('/device', chaeckRole('ADMIN'), DeviceController.create);
 app.get('/device', DeviceController.getAll);
+app.get('/device/:id', DeviceController.getOne);
 app.get('/hit', DeviceController.getAllHit);
 app.get('/sale', DeviceController.getAllSale);
-app.get('/device/:id', DeviceController.getOne);
+app.post('/device', chaeckRole('ADMIN'), DeviceController.create);
+app.patch('/device', chaeckRole('ADMIN'), DeviceController.update);
+app.delete('/device/:id', chaeckRole('ADMIN'), DeviceController.deleteOne);
+app.get('/reviews', DeviceController.getAllReviews);
 
 // REVIEWS
 app.post('/review', ReviewController.create);
@@ -54,10 +59,14 @@ app.post('/review', ReviewController.create);
 // BRAND
 app.get('/brand', BrandController.getAll);
 app.post('/brand', chaeckRole('ADMIN'), BrandController.create);
+app.patch('/brand', chaeckRole('ADMIN'), BrandController.update);
+app.delete('/brand/:id', chaeckRole('ADMIN'), BrandController.destroy);
 
 // TYPE
 app.get('/type', TypeController.getAll);
 app.post('/type', chaeckRole('ADMIN'), TypeController.create);
+app.patch('/type', chaeckRole('ADMIN'), TypeController.update);
+app.delete('/type/:id', chaeckRole('ADMIN'), TypeController.destroy);
 
 // BASKET
 app.post('/basket', AuthMiddleware, BasketController.add);

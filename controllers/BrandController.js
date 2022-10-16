@@ -17,7 +17,29 @@ export const create = async (req, res) => {
   }
 };
 
+export const update = async (req, res) => {
+  try {
+    const { name, id } = req.body;
+
+    await Brand.update({ name: name }, { where: { id: id } });
+
+    return res.json('succees').status(200);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getAll = async (req, res) => {
   const brands = await Brand.findAll();
   return res.json(brands);
+};
+
+export const destroy = async (req, res) => {
+  const { id } = req.params;
+
+  await Brand.destroy({
+    where: { id },
+  });
+
+  res.status(200).json('succes');
 };

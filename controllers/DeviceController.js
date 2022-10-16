@@ -11,20 +11,21 @@ export const create = async (req, res, next) => {
   try {
     const { name, price, brandId, typeId, info, hit, sale, discount } = req.body;
     const { img } = req.files;
-    let fileName = v4() + '.jpg';
-    img.mv(path.resolve(__dirname, '..', 'static', fileName));
+    console.log(img);
+    img.mv(path.resolve(__dirname, '..', 'static', img.name));
+
+    const salePrice = Math.round(price - (price / 100) * discount);
+
     const device = await Device.create({
       name: name,
-      price: price,
+      price: salePrice,
       brandId: brandId,
       typeId: typeId,
-      hit: hit ? hit : false,
-      sale: sale ? sale : false,
+      hit: hit,
+      sale: sale,
       discount: discount,
-      img: fileName,
+      img: img.name,
     });
-
-    console.log(info);
 
     if (info) {
       JSON.parse(info).forEach((element) =>
@@ -34,6 +35,52 @@ export const create = async (req, res, next) => {
           deviceId: device.id,
         }),
       );
+    }
+
+    return res.json(device);
+  } catch (error) {
+    next(AppError.badRequest(error.message));
+  }
+};
+
+export const update = async (req, res, next) => {
+  try {
+    const { id, name, price, brandId, typeId, info, hit, sale, discount } = req.body;
+    const { img } = req.files;
+    img.mv(path.resolve(__dirname, '..', 'static', img.name));
+
+    const salePrice = Math.round(price - (price / 100) * discount);
+
+    const device = await Device.update(
+      {
+        name: name,
+        price: salePrice,
+        brandId: brandId,
+        typeId: typeId,
+        hit: hit,
+        sale: sale,
+        discount: discount,
+        img: img.name,
+      },
+      {
+        where: { id },
+      },
+    );
+
+    if (info) {
+      await DeviceInfo.destroy({
+        where: {
+          deviceId: id,
+        },
+      });
+
+      JSON.parse(info).forEach((element) => {
+        DeviceInfo.create({
+          deviceId: id,
+          title: element.title,
+          description: element.description,
+        });
+      });
     }
 
     return res.json(device);
@@ -125,4 +172,20 @@ export const getOne = async (req, res) => {
     ],
   });
   return res.json(device);
+};
+
+export const getAllReviews = async (req, res) => {
+  const data = await Reviews.findAll({ limit: 5 });
+
+  return res.json(data).status(200);
+};
+
+export const deleteOne = async (req, res) => {
+  const { id } = req.params;
+
+  await Device.destroy({
+    where: { id },
+  });
+
+  res.status(200);
 };
