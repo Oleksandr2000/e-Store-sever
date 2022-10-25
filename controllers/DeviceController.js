@@ -114,7 +114,6 @@ export const getAll = async (req, res) => {
   const parseTypeId = typeId.split(',');
 
   let offset = page * limit - limit;
-  let devices;
 
   if (str && !brandId && !typeId) {
     const findDevices = await Device.findAll({
@@ -125,31 +124,37 @@ export const getAll = async (req, res) => {
       },
     });
 
-    res.json(findDevices);
+    return res.json(findDevices);
   }
 
   if (!brandId && !typeId) {
-    devices = await Device.findAndCountAll({ limit, offset });
+    const devices = await Device.findAndCountAll({ limit, offset });
+
+    return res.json(devices);
   }
 
   if (brandId && !typeId) {
-    devices = await Device.findAndCountAll({
+    const devices = await Device.findAndCountAll({
       where: { brandId: parseBrandId },
       limit,
       offset,
     });
+
+    return res.json(devices);
   }
 
   if (!brandId && typeId) {
-    devices = await Device.findAndCountAll({
+    const devices = await Device.findAndCountAll({
       where: { typeId: parseTypeId },
       limit,
       offset,
     });
+
+    return res.json(devices);
   }
 
   if (brandId && typeId) {
-    devices = await Device.findAndCountAll({
+    const devices = await Device.findAndCountAll({
       where: {
         typeId: parseTypeId,
         brandId: parseBrandId,
@@ -157,9 +162,9 @@ export const getAll = async (req, res) => {
       limit,
       offset,
     });
-  }
 
-  res.json(devices);
+    return res.json(devices);
+  }
 };
 
 export const getOne = async (req, res) => {
