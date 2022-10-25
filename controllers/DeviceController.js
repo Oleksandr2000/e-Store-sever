@@ -83,7 +83,7 @@ export const update = async (req, res, next) => {
       });
     }
 
-    return res.json(device);
+    res.json(device);
   } catch (error) {
     next(AppError.badRequest(error.message));
   }
@@ -94,7 +94,7 @@ export const getAllHit = async (req, res) => {
     where: { hit: true },
   });
 
-  return res.json(devices);
+  res.json(devices);
 };
 
 export const getAllSale = async (req, res) => {
@@ -102,7 +102,7 @@ export const getAllSale = async (req, res) => {
     where: { sale: true },
   });
 
-  return res.json(devices);
+  res.json(devices);
 };
 
 export const getAll = async (req, res) => {
@@ -125,7 +125,7 @@ export const getAll = async (req, res) => {
       },
     });
 
-    return res.json(findDevices);
+    res.json(findDevices);
   }
 
   if (!brandId && !typeId) {
@@ -159,7 +159,7 @@ export const getAll = async (req, res) => {
     });
   }
 
-  return res.json(devices);
+  res.json(devices);
 };
 
 export const getOne = async (req, res) => {
@@ -171,7 +171,7 @@ export const getOne = async (req, res) => {
       { model: Reviews, as: 'reviews' },
     ],
   });
-  return res.json(device);
+  res.json(device);
 };
 
 export const getAllReviews = async (req, res) => {
