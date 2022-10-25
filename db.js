@@ -3,12 +3,12 @@ dotenv.config();
 import { Sequelize } from 'sequelize';
 
 const sequelize = new Sequelize(
-  'd786o8etkud9jk', // NAME DB
-  'kbelfgxbdipyuv', // User
-  '33b622f92ca3b984c7f295abb1037ddebaca5645751791fc3d6cbe2f1cc5645c',
+  'dda0kl4mirq46i', // NAME DB
+  'ajkbbdleianlkv', // User
+  'c6b099e6ed70efd92144698cc105cf303b339f6d491c943c3db335dd9a2a6a2c',
   {
     dialect: 'postgres',
-    host: 'ec2-54-76-43-89.eu-west-1.compute.amazonaws.com',
+    host: 'ec2-34-241-90-235.eu-west-1.compute.amazonaws.com',
     port: 5432,
     dialectOptions: {
       ssl: {
